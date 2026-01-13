@@ -43,6 +43,10 @@ def get_article(id):
         "article_upload_time": article.article_upload_time
     })
 
+@app.route("/api/write", methods=['POST'])
+def create_article():
+    ...
+
 
 @app.route("/api", methods=['GET'])
 def get_titles():
@@ -77,4 +81,3 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         app.run(debug=True)
-        
