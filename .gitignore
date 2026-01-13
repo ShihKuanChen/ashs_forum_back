@@ -1,0 +1,8 @@
+# python envirnoment
+ashs_forum_back_env
+
+# editor config
+.vscode
+
+# environment values
+.env
