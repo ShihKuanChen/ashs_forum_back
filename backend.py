@@ -14,13 +14,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-class User(db.Modle):
-    __tablename__ = 'users'
-    user_id = db.Column(db.BigInteger, primary_key=True)
-    user_name = db.Column(db.String(80))
-    user_email = db.Column(db.String(80))
+# class User(db.Modle):
+#     __tablename__ = 'users'
+#     user_id = db.Column(db.BigInteger, primary_key=True)
+#     user_name = db.Column(db.String(80))
+#     user_email = db.Column(db.String(80))
 
-class Article(db.Modle):
+class Article(db.Model):
     __tablename__ = 'articles'
     article_id = db.Column(db.BigInteger, primary_key=True)
     article_board = db.Column(db.String(80))
