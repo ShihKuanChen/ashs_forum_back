@@ -1,8 +1,10 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, or_
 from dotenv import load_dotenv
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 # load .env file
 load_dotenv()
@@ -45,7 +47,10 @@ def get_article(id):
 
 @app.route("/api/write", methods=['POST'])
 def create_article():
-    ...
+    if not session.get('logged_in'):
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    request_data = request.get_json()
 
 
 @app.route("/api", methods=['GET'])
@@ -68,14 +73,36 @@ def get_titles():
     for article in articles:
         result.append({
             "article_title": article.article_title,
-            "article_upload_time": article.article_upload_time
+            "article_upload_time": article.article_upload_time,
+            "article_id": article.article_id
         })
     
     return result
 
-@app.route("/api/login")
+@app.route("/api/login", methods=['POST'])
 def login():
-    ...
+    request_data = request.get_json()
+    token = request_data['token']
+
+    try:
+        id_info = id_token.verify_oauth2_token(token, requests.Request(), os.getenv('CLIENT_ID'))
+        session['user_id'] = id_info['sub']
+        session['user_name'] = id_info['name']
+        session['user_email'] = id_info['email']
+        session['logged_in'] = True 
+    
+        return jsonify({"message": "Login successful"}), 200
+        
+    except ValueError:
+        return jsonify({"error": "Invalid token"}), 401
+
+@app.route("/api/is_logged_in", methods=['GET'])
+def login():
+    if not session.get('logged_in'):
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    return jsonify({"message": "Login successful"}), 200
+    
 
 if __name__ == "__main__":
     with app.app_context():
