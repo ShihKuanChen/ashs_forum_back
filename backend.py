@@ -97,7 +97,7 @@ def login():
         return jsonify({"error": "Invalid token"}), 401
 
 @app.route("/api/is_logged_in", methods=['GET'])
-def login():
+def is_logged_in():
     if not session.get('logged_in'):
         return jsonify({"error": "Unauthorized"}), 401
     
