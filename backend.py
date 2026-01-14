@@ -11,8 +11,12 @@ load_dotenv()
 
 app = Flask(__name__)
 
+# set sql
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.secret_key = os.getenv('SECRET_KEY')
+
 
 db = SQLAlchemy(app)
 
@@ -56,7 +60,7 @@ def create_article():
 @app.route("/api", methods=['GET'])
 def get_titles():
     limit = request.args.get('limit', default=30, type=int)
-    start_id = request.args.get('start_id')
+    start_id = request.args.get('start_id', default=-1, type=int)
     board = request.args.get('board')
 
     stmt = (
