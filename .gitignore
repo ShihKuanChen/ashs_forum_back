@@ -6,3 +6,6 @@ ashs_forum_back_env
 
 # environment values
 .env
+
+# sqlite database
+instance
